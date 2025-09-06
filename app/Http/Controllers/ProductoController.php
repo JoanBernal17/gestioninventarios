@@ -60,9 +60,16 @@ class ProductoController extends Controller
     public function destroy($codigo)
     {
         $producto = Producto::findOrFail($codigo);
+
+        // Validamos si tiene ventas asociadas
+        if ($producto->ventas()->count() > 0) {
+            return redirect()->route('productos.index')
+                             ->with('error', '❌ No se puede eliminar el producto porque tiene ventas asociadas.');
+        }
+
         $producto->delete();
 
         return redirect()->route('productos.index')
-                         ->with('success', 'Producto eliminado correctamente.');
+                         ->with('success', '✅ Producto eliminado correctamente.');
     }
 }

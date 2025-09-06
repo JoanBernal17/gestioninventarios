@@ -5,45 +5,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Ventas</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f6f8; padding: 30px; }
-        h1 { color: #333; text-align: center; margin-bottom: 20px; }
-        a.button { display: inline-block; background: #4CAF50; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-bottom: 15px; transition: background 0.3s ease; }
-        a.button:hover { background: #45a049; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd; }
-        th { background: #2196F3; color: white; }
-        tr:hover { background: #f1f1f1; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9fafc;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            width: 95%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .acciones {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .acciones a {
+            display: inline-block;
+            margin: 0 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .acciones .volver {
+            background: #555;
+            color: white;
+        }
+        .acciones .volver:hover {
+            background: #333;
+            transform: scale(1.05);
+        }
+
+        .acciones .registrar {
+            background: #4CAF50;
+            color: white;
+        }
+        .acciones .registrar:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 15px;
+        }
+
+        th {
+            background: #4CAF50;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        .mensaje {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .success { color: green; }
+        .error { color: red; }
+
+        footer {
+            margin-top: auto;
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
-    <h1>Lista de Ventas</h1>
-    <div style="margin-bottom: 15px;">
-        <a href="{{ route('menu') }}" class="button" style="background:#555; margin-right:10px;">Regresar</a>
-        <a href="{{ route('ventas.create') }}" class="button">Registrar Venta</a>
+
+    <header>
+        <h1>📋 Lista de Ventas</h1>
+    </header>
+
+    <div class="container">
+
+        <div class="acciones">
+            <a href="{{ route('menu') }}" class="volver">⬅ Regresar</a>
+            <a href="{{ route('ventas.create') }}" class="registrar">➕ Registrar Venta</a>
+        </div>
+
+        @if(session('success'))
+            <p class="mensaje success">{{ session('success') }}</p>
+        @endif
+        @if(session('error'))
+            <p class="mensaje error">{{ session('error') }}</p>
+        @endif
+
+        <table>
+            <tr>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Fecha</th>
+            </tr>
+            @foreach($ventas as $venta)
+            <tr>
+                <td>{{ $venta->producto_codigo }}</td>
+                <td>{{ $venta->producto->nombre ?? 'N/A' }}</td>
+                <td>{{ $venta->cantidad }}</td>
+                <td>${{ number_format($venta->total, 2) }}</td>
+                <td>{{ $venta->created_at->format('d/m/Y H:i') }}</td>
+            </tr>
+            @endforeach
+        </table>
     </div>
-    @if(session('success'))
-        <p style="color:green;">{{ session('success') }}</p>
-    @endif
-    @if(session('error'))
-        <p style="color:red;">{{ session('error') }}</p>
-    @endif
-    <table>
-        <tr>
-            <th>Código</th>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Total</th>
-            <th>Fecha</th>
-        </tr>
-        @foreach($ventas as $venta)
-        <tr>
-            <td>{{ $venta->producto_codigo }}</td>
-            <td>{{ $venta->producto->nombre ?? 'N/A' }}</td>
-            <td>{{ $venta->cantidad }}</td>
-            <td>{{ number_format($venta->total, 2) }}</td>
-            <td>{{ $venta->created_at->format('d/m/Y H:i') }}</td>
-        </tr>
-        @endforeach
-    </table>
+
+    <footer>
+        Elaborado por: <strong>Joan Alonso Bernal Suarez</strong>
+    </footer>
+
 </body>
 </html>

@@ -3,74 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Inventarios</title>
+    <title>Gestión de Inventarios - Droguería</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
             margin: 0;
             padding: 0;
+            background: #f9fafc;
+            color: #333;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            min-height: 100vh;
         }
 
-        h1 {
-            margin-top: 50px;
-            color: #333;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        header {
+            background: linear-gradient(135deg, #4CAF50, #2e7d32);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .menu {
             display: flex;
-            gap: 30px;
-            margin-top: 50px;
+            justify-content: center;
+            gap: 40px;
+            margin: 60px auto;
+            flex-wrap: wrap;
         }
 
         .menu a {
-            display: block;
-            width: 200px;
-            height: 150px;
-            background: #4CAF50;
-            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 220px;
+            height: 180px;
+            background: white;
+            color: #2e7d32;
             text-decoration: none;
             font-size: 18px;
             font-weight: bold;
-            text-align: center;
-            line-height: 150px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
 
         .menu a:hover {
-            background: #45a049;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
         }
 
-        @media (max-width: 500px) {
+        .menu a i {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            margin-top: auto;
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 600px) {
             .menu {
                 flex-direction: column;
                 gap: 20px;
             }
             .menu a {
-                width: 150px;
-                height: 120px;
-                line-height: 120px;
+                width: 180px;
+                height: 140px;
                 font-size: 16px;
+            }
+            .menu a i {
+                font-size: 40px;
             }
         }
     </style>
+    <!-- Íconos (FontAwesome CDN) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <h1>Gestión de Inventarios</h1>
+    <header>
+        <h1>💊 Gestión de Inventarios - Droguería</h1>
+    </header>
 
     <div class="menu">
-        <a href="{{ route('productos.index') }}">Gestionar Productos</a>
-        <a href="{{ route('ventas.index') }}">Gestionar Ventas</a>
+        <a href="{{ route('productos.index') }}">
+            <i class="fas fa-capsules"></i>
+            Gestionar Productos
+        </a>
+        <a href="{{ route('ventas.index') }}">
+            <i class="fas fa-shopping-cart"></i>
+            Gestionar Ventas
+        </a>
     </div>
+
+    <footer>
+        Elaborado por: <strong>Joan Alonso Bernal Suarez</strong>
+    </footer>
 
 </body>
 </html>

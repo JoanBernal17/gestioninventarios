@@ -25,29 +25,40 @@ class VentaController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'producto_id' => 'required|exists:productos,codigo',
-            'cantidad' => 'required|integer|min:1',
-        ]);
+{
+    $request->validate([
+        'producto_id' => 'required|exists:productos,codigo',
+        'cantidad' => 'required|integer|min:1',
+    ]);
 
-        $producto = Producto::findOrFail($request->producto_id);
+    $producto = Producto::findOrFail($request->producto_id);
 
-        if ($request->cantidad > $producto->cantidad) {
-            return redirect()->back()->with('error', 'No hay suficiente stock disponible.');
-        }
-
-        $total = $producto->precio * $request->cantidad;
-        $producto->cantidad -= $request->cantidad;
-        $producto->save();
-
-        Venta::create([
-            'producto_codigo' => $producto->codigo,
-            'cantidad' => $request->cantidad,
-            'precio_unitario' => $producto->precio,
-            'total' => $total,
-        ]);
-
-        return redirect()->route('ventas.index')->with('success', 'Venta registrada correctamente.');
+    // ✅ Validar si ya existe una venta para este producto
+    $ventaExistente = Venta::where('producto_codigo', $producto->codigo)->first();
+    if ($ventaExistente) {
+        return redirect()->back()->with('error', 'Este producto ya fue vendido. Solo se permite una venta por producto.');
     }
+
+    // ✅ Validar stock
+    if ($request->cantidad > $producto->cantidad) {
+        return redirect()->back()->with('error', 'No hay suficiente stock disponible.');
+    }
+
+    $total = $producto->precio * $request->cantidad;
+
+    // ✅ Reducir stock
+    $producto->cantidad -= $request->cantidad;
+    $producto->save();
+
+    // ✅ Crear la venta
+    Venta::create([
+        'producto_codigo' => $producto->codigo,
+        'cantidad' => $request->cantidad,
+        'precio_unitario' => $producto->precio,
+        'total' => $total,
+    ]);
+
+    return redirect()->route('ventas.index')->with('success', 'Venta registrada correctamente.');
+}
+
 }

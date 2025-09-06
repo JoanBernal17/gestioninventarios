@@ -28,4 +28,12 @@ class Producto extends Model
     {
         return $this->hasMany(Venta::class, 'producto_codigo', 'codigo');
     }
+
+    /**
+     * Verifica si el producto tiene ventas asociadas
+     */
+    public function tieneVentas()
+    {
+        return $this->ventas()->exists();
+    }
 }
